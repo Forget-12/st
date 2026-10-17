@@ -18,9 +18,6 @@ async function createBrowser() {
                 executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, 
                 defaultViewport: null,
                 args: [
-                    '--no-sandbox',
-                    '--disable-setuid-sandbox',
-                    '--disable-dev-shm-usage',
                     '--window-size=1280,720'
                 ]
             }
