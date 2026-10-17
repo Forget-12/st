@@ -1,36 +1,40 @@
+process.env.PUPPETEER_EXECUTABLE_PATH = '/opt/chrome-arm64/chrome'
+process.env.DISPLAY = ':1'
+
 const { connect } = require("puppeteer-real-browser")
+
 async function createBrowser() {
     try {
         if (global.finished == true) return
-
         global.browser = null
-
-        // console.log('Launching the browser...');
 
         const { browser } = await connect({
             headless: false,
             turnstile: true,
-            connectOption: { defaultViewport: null },
             disableXvfb: false,
-			args: ['--window-size=150,150']
+            connectOption: {
+                executablePath: '/opt/chrome-arm64/chrome',   // ← Chrome ARM64 asli
+                defaultViewport: null,
+                args: [
+                    '--window-size=1280,720'
+                ]
+            }
         })
 
-        // console.log('Browser launched');
-
-        global.browser = browser;
+        global.browser = browser
+        console.log('Browser launched:', browser.wsEndpoint?.())
 
         browser.on('disconnected', async () => {
             if (global.finished == true) return
-            console.log('Browser disconnected');
-            await new Promise(resolve => setTimeout(resolve, 3000));
-            await createBrowser();
+            console.log('Browser disconnected')
+            await new Promise(r => setTimeout(r, 3000))
+            await createBrowser()
         })
-
     } catch (e) {
-        console.log(e.message);
+        console.log('FULL ERROR:', e)
         if (global.finished == true) return
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        await createBrowser();
+        await new Promise(r => setTimeout(r, 3000))
+        await createBrowser()
     }
 }
 createBrowser()
