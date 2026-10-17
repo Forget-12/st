@@ -1,5 +1,6 @@
-process.env.PUPPETEER_EXECUTABLE_PATH = '/opt/chrome-arm64/chrome'
-process.env.DISPLAY = ':1'
+// HAPUS 2 baris ini:
+// process.env.PUPPETEER_EXECUTABLE_PATH = '/opt/chrome-arm64/chrome'
+// process.env.DISPLAY = ':1'
 
 const { connect } = require("puppeteer-real-browser")
 
@@ -13,9 +14,13 @@ async function createBrowser() {
             turnstile: true,
             disableXvfb: false,
             connectOption: {
-                executablePath: '/opt/chrome-arm64/chrome',   // ← Chrome ARM64 asli
+                // GANTI BARIS INI agar mengambil dari Dockerfile:
+                executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, 
                 defaultViewport: null,
                 args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
                     '--window-size=1280,720'
                 ]
             }
