@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<script src="https://www.google.com/recaptcha/api.js?render=<site-key>"></script>
+
+<script>
+function runRecaptchaV3() {
+    console.log("[PAGE] runRecaptchaV3 start");
+
+    grecaptcha.ready(function () {
+        console.log("[PAGE] grecaptcha ready");
+
+        grecaptcha.execute('<site-key>', { action: 'page_load' })
+        .then(function (token) {
+            console.log("[PAGE] TOKEN:", token);
+
+            var c = document.createElement('input');
+            c.type = 'hidden';
+            c.name = 'g-recaptcha-response';
+            c.value = token;
+            document.body.appendChild(c);
+        })
+        .catch(e => console.log("[PAGE] EXEC ERROR", e));
+    });
+}
+
+window.onload = runRecaptchaV3;
+</script>
+
+</head>
+<body>
+recaptcha v3 solving...
+</body>
+</html>
