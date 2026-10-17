@@ -27,32 +27,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # ─────────────────────────────────────────────
 ENV NODE_ENV=production
 ENV PORT=3000
-
-# Arahkan Puppeteer ke Google Chrome sistem
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_SKIP_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
-# ─────────────────────────────────────────────
-# Install dependency Node (murni dari package.json)
-# ─────────────────────────────────────────────
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
 RUN npm i
 
-# ─────────────────────────────────────────────
-# Copy source
-# ─────────────────────────────────────────────
 COPY . .
 
-# ─────────────────────────────────────────────
-# Non-root user
-# ─────────────────────────────────────────────
 RUN groupadd -r app && useradd -r -g app app \
   && chown -R app:app /app
 USER app
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+# PERHATIKAN BARIS INI: Kita bungkus pakai xvfb-run
+CMD ["xvfb-run", "-a", "-s", "-screen 0 1280x720x24", "node", "index.js"]
