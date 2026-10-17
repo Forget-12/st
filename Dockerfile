@@ -4,16 +4,18 @@
 FROM node:20-bookworm-slim
 
 # ─────────────────────────────────────────────
-# Google Chrome stable (bukan Chromium)
-# apt akan otomatis narik semua lib yang dibutuhkan .deb-nya
+# Google Chrome stable + Xvfb (Virtual Screen)
 # ─────────────────────────────────────────────
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     wget \
-    xvfb \
     gnupg \
     fonts-liberation \
     fonts-noto-color-emoji \
+    xvfb \
+    libxtst6 \
+    libxi6 \
+    libxss1 \
   && wget -q -O /tmp/chrome.deb \
        https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
   && apt-get install -y --no-install-recommends /tmp/chrome.deb \
