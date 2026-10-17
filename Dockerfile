@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-liberation \
     fonts-noto-color-emoji \
     xvfb \
+    xauth \
     libxtst6 \
     libxi6 \
     libxss1 \
@@ -44,5 +45,4 @@ USER app
 
 EXPOSE 3000
 
-# PERHATIKAN BARIS INI: Kita bungkus pakai xvfb-run
 CMD ["xvfb-run", "-a", "-s", "-screen 0 1280x720x24", "node", "index.js"]
